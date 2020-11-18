@@ -146,17 +146,16 @@ fi
 echo ::set-output name=tag::$new
 
 # Bump version file
+git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+git pull github ${GITHUB_REF} --ff-only
+
 filename=VERSION
 test -f $filename || touch $filename
 echo $new > $filename
 export COMMIT_TITLE=$new
 
 git config --global user.email "gha@github.co"
-
-git config --global user.name "Auto tagger"
-
-git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-git pull github ${GITHUB_REF} --ff-only
+git config --global user.name "BOXT Tagger"
 
 git add .
 git commit -m "Bump version to $COMMIT_TITLE"
