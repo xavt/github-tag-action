@@ -152,7 +152,10 @@ echo $tag > $filename
 export COMMIT_TITLE=$tag
 git add .
 git commit -m "Bump version to $COMMIT_TITLE"
-git push origin master
+
+remote_repo="https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
+
+git push "${remote_repo}" HEAD:master;
 
 # create local git tag
 git tag $new
