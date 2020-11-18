@@ -150,12 +150,14 @@ filename=VERSION
 test -f $filename || touch $filename
 echo $tag > $filename
 export COMMIT_TITLE=$tag
+
+git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+git pull github ${GITHUB_REF} --ff-only
+
 git add .
 git commit -m "Bump version to $COMMIT_TITLE"
 
-remote_repo="https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
-
-git push "${remote_repo}" HEAD:master;
+git push github HEAD:${GITHUB_REF}
 
 # create local git tag
 git tag $new
