@@ -163,6 +163,8 @@ git commit -m "Bump version to $COMMIT_TITLE"
 
 git push github HEAD:${GITHUB_REF}
 
+commit=$(git rev-parse HEAD)
+
 # create local git tag
 git tag $new
 
