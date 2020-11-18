@@ -148,8 +148,8 @@ echo ::set-output name=tag::$new
 # Bump version file
 filename=VERSION
 test -f $filename || touch $filename
-echo $tag > $filename
-export COMMIT_TITLE=$tag
+echo $new > $filename
+export COMMIT_TITLE=$new
 
 git config --global user.email "gha@github.co"
 
