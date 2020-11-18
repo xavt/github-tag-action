@@ -151,6 +151,10 @@ test -f $filename || touch $filename
 echo $tag > $filename
 export COMMIT_TITLE=$tag
 
+git config --global user.email "gha@github.co"
+
+git config --global user.name "Auto tagger"
+
 git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
 git pull github ${GITHUB_REF} --ff-only
 
