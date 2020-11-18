@@ -145,6 +145,15 @@ fi
 
 echo ::set-output name=tag::$new
 
+# Bump version file
+filename=VERSION
+test -f $filename || touch $filename
+echo $tag > $filename
+export COMMIT_TITLE=$tag
+git add .
+git commit -m "Bump version to $COMMIT_TITLE"
+git push origin master
+
 # create local git tag
 git tag $new
 
