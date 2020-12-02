@@ -157,6 +157,8 @@ export COMMIT_TITLE=$new
 git config --global user.email "gha@github.co"
 git config --global user.name "BOXT Tagger"
 
+bundle install
+
 git add .
 git commit -m "Bump version to $COMMIT_TITLE"
 
