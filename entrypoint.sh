@@ -175,7 +175,7 @@ then
   git add Gemfile.lock
 fi
 
-git add $filename
+git add filename
 git commit -m "Bump version to $COMMIT_TITLE"
 
 git push github HEAD:${GITHUB_REF}
