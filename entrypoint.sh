@@ -169,9 +169,10 @@ if $bundle
 then
   gem install bundler:$bundler_version
   bundle install
+  git add Gemfile.lock
 fi
 
-git add .
+git add filename
 git commit -m "Bump version to $COMMIT_TITLE"
 
 git push github HEAD:${GITHUB_REF}
