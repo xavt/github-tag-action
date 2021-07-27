@@ -15,6 +15,7 @@ suffix=${PRERELEASE_SUFFIX:-beta}
 verbose=${VERBOSE:-true}
 filename=${VERSION_FILENAME:-VERSION}
 bundle=${BUNDLE:-false}
+bundler_version=${BUNDLER_VERSION:-2.2.21}
 
 cd ${GITHUB_WORKSPACE}/${source}
 
@@ -31,6 +32,7 @@ echo -e "\tPRERELEASE_SUFFIX: ${suffix}"
 echo -e "\tVERBOSE: ${verbose}"
 echo -e "\tFILENAME: ${filename}"
 echo -e "\tBUNDLE: ${bundle}"
+echo -e "\tBUNDLER_VERSION: ${bundler_version}"
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
@@ -165,6 +167,7 @@ git config --global user.name "BOXT Tagger"
 # echo log if verbose is wanted
 if $bundle
 then
+  gem install bundler:$bundler_version
   bundle install
 fi
 
