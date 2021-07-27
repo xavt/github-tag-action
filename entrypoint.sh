@@ -16,6 +16,7 @@ verbose=${VERBOSE:-true}
 filename=${VERSION_FILENAME:-VERSION}
 bundle=${BUNDLE:-false}
 bundler_version=${BUNDLER_VERSION:-2.2.21}
+bundle_path=${BUNDLE_PATH:-vendor/bundle}
 
 cd ${GITHUB_WORKSPACE}/${source}
 
@@ -33,6 +34,7 @@ echo -e "\tVERBOSE: ${verbose}"
 echo -e "\tFILENAME: ${filename}"
 echo -e "\tBUNDLE: ${bundle}"
 echo -e "\tBUNDLER_VERSION: ${bundler_version}"
+echo -e "\tBUNDLE_PATH: ${bundle_path}"
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
@@ -168,7 +170,8 @@ git config --global user.name "BOXT Tagger"
 if $bundle
 then
   gem install bundler:$bundler_version
-  bundle install
+  bundle config path $bundle_path
+  bundle install --jobs 4 --retry 3
   git add Gemfile.lock
 fi
 
