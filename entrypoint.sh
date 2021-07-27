@@ -13,6 +13,8 @@ initial_version=${INITIAL_VERSION:-0.0.0}
 tag_context=${TAG_CONTEXT:-repo}
 suffix=${PRERELEASE_SUFFIX:-beta}
 verbose=${VERBOSE:-true}
+filename=${VERSION_FILENAME:-VERSION}
+bundle=${BUNDLE:-false}
 
 cd ${GITHUB_WORKSPACE}/${source}
 
@@ -27,6 +29,8 @@ echo -e "\tINITIAL_VERSION: ${initial_version}"
 echo -e "\tTAG_CONTEXT: ${tag_context}"
 echo -e "\tPRERELEASE_SUFFIX: ${suffix}"
 echo -e "\tVERBOSE: ${verbose}"
+echo -e "\tFILENAME: ${filename}"
+echo -e "\tBUNDLE: ${bundle}"
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
@@ -151,7 +155,6 @@ echo ::set-output name=tag::$new
 git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
 git pull github ${GITHUB_REF} --ff-only
 
-filename=VERSION
 test -f $filename || touch $filename
 echo $new > $filename
 export COMMIT_TITLE=$new
@@ -159,7 +162,11 @@ export COMMIT_TITLE=$new
 git config --global user.email "gha@github.co"
 git config --global user.name "BOXT Tagger"
 
-bundle install
+# echo log if verbose is wanted
+if $bundle
+then
+  bundle install
+fi
 
 git add .
 git commit -m "Bump version to $COMMIT_TITLE"
