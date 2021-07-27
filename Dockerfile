@@ -7,6 +7,7 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN apk update && apk add bash git curl jq && apk add --update nodejs npm && npm install -g semver
 
-RUN apk add --no-cache build-base
+# Added Ruby and PG deps
+RUN apk add --no-cache build-base openssl postgresql-dev
 
 ENTRYPOINT ["/entrypoint.sh"]
