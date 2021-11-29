@@ -3,7 +3,7 @@
 set -o pipefail
 
 # config
-default_semvar_bump=${DEFAULT_BUMP:-minor}
+default_semvar_bump=${DEFAULT_SEMVAR_BUMP:-patch}
 with_v=${WITH_V:-false}
 release_branches=${RELEASE_BRANCHES:-master,main}
 custom_tag=${CUSTOM_TAG}
@@ -21,7 +21,7 @@ bundle_path=${BUNDLE_PATH:-vendor/bundle}
 cd ${GITHUB_WORKSPACE}/${source}
 
 echo "*** CONFIGURATION ***"
-echo -e "\tDEFAULT_BUMP: ${default_semvar_bump}"
+echo -e "\tDEFAULT_SEMVAR_BUMP: ${default_semvar_bump}"
 echo -e "\tWITH_V: ${with_v}"
 echo -e "\tRELEASE_BRANCHES: ${release_branches}"
 echo -e "\tCUSTOM_TAG: ${custom_tag}"
@@ -93,19 +93,12 @@ then
   echo $log
 fi
 
-case "$log" in
-    *#major* ) new=$(semver -i major $tag); part="major";;
-    *#minor* ) new=$(semver -i minor $tag); part="minor";;
-    *#patch* ) new=$(semver -i patch $tag); part="patch";;
-    *#none* ) 
-        echo "Default bump was set to none. Skipping..."; echo ::set-output name=new_tag::$tag; echo ::set-output name=tag::$tag; exit 0;;
-    * ) 
-        if [ "$default_semvar_bump" == "none" ]; then
-            echo "Default bump was set to none. Skipping..."; echo ::set-output name=new_tag::$tag; echo ::set-output name=tag::$tag; exit 0 
-        else 
-            new=$(semver -i "${default_semvar_bump}" $tag); part=$default_semvar_bump 
-        fi 
-        ;;
+case "$default_semvar_bump" in
+    *major* ) new=$(semver -i major $tag); part="major";;
+    *minor* ) new=$(semver -i minor $tag); part="minor";;
+    *patch* ) new=$(semver -i patch $tag); part="patch";;
+    * ) echo "Default bump was not set or an invalid value. Skipping..."; echo ::set-output name=new_tag::$tag; echo ::set-output name=tag::$tag; exit 0 
+
 esac
 
 if $pre_release
